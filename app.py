@@ -2,13 +2,13 @@ from pathlib import Path
 import streamlit as st
 
 # --- Config + masquage sidebar ---
-st.set_page_config(page_title="Auth Demo", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Projet Signaux", layout="centered", initial_sidebar_state="collapsed")
 st.markdown("<style>[data-testid='stSidebar'],[data-testid='stSidebarNav']{display:none;}</style>", unsafe_allow_html=True)
 
-st.title("🔐 Auth Demo")
+st.title("Projet Signaux")
 
 # Lien clair vers la page de tests (PAS de switch_page)
-st.page_link("pages/test_son.py", label="🧪 Page de tests")
+st.page_link("pages/test_son.py", label="Page test")
 
 # --- Etat global minimal ---
 FLAG = Path("registered.flag")
@@ -36,7 +36,7 @@ elif not st.session_state.logged_in:
 
 else:
     st.subheader("Compte")
-    st.success("✅ Vous êtes connecté")
+    st.success("Vous êtes connecté")
     if st.button("Se déconnecter"):
         st.session_state.logged_in = False
         st.rerun()
