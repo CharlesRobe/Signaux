@@ -6,12 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ad3ad477-e78c-40dc-8c68-fe41efae5187" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/audio/Charles/Phrase1/rec_20251017_202204.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/rec_20251017_191507.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/rec_20251017_193350.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/rec_20251017_193356.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/rec_20251017_193413.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/audio/gdh/jj/normal.wav" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/test_son.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/test_son.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/registered.flag" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +99,7 @@
       <workItem from="1759485915077" duration="2803000" />
       <workItem from="1759820637256" duration="35000" />
       <workItem from="1760713723084" duration="4526000" />
-      <workItem from="1760973810936" duration="8498000" />
+      <workItem from="1760973810936" duration="12658000" />
     </task>
     <servers />
   </component>
