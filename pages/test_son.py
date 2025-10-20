@@ -1,105 +1,103 @@
 from pathlib import Path
-from datetime import datetime
 import streamlit as st
 
-st.set_page_config(page_title="🧪 Tests", layout="centered", initial_sidebar_state="collapsed")
-st.markdown("<style>[data-testid='stSidebar'],[data-testid='stSidebarNav']{display:none;}</style>",
-            unsafe_allow_html=True)
-
-st.title("Tests")
-st.page_link("app.py", label="Accueil")
+st.set_page_config(page_title="Page des tests", layout="centered")
+st.title("Page des tests")
 
 AUDIO_DIR = Path("data/audio")
 AUDIO_DIR.mkdir(parents=True, exist_ok=True)
-AUDIO_EXT = ("wav", "mp3", "m4a", "ogg", "flac")
+AUDIO_EXT = ("wav")
 
-# Initialiser session_state pour garder les infos remplies
-if "person" not in st.session_state:
-    st.session_state.person = ""
-if "subdir" not in st.session_state:
-    st.session_state.subdir = ""
-if "desc" not in st.session_state:
-    st.session_state.desc = f"rec_{datetime.now():%Y%m%d_%H%M%S}"
+enregistrement = st.checkbox("Afficher la partie enregistrement", value=True)
+tests = st.checkbox("Afficher les dossiers personnels", value=True)
 
-# Regrouper tout dans un seul conteneur/rectangle
-with st.expander("Nouvel enregistrement", expanded=True):
-    persons = [p.name for p in AUDIO_DIR.iterdir() if p.is_dir()]
-    # Choix ou création personne
-    sel_person = st.selectbox("Personne", ["(nouvelle)"] + persons, index=0 if st.session_state.person == "" else None)
-    if sel_person == "(nouvelle)":
-        new_person = st.text_input("Nouvelle personne", value=st.session_state.person)
-        st.session_state.person = new_person.strip()
-    else:
-        st.session_state.person = sel_person
+def safe_string(s):
+    return "".join(c for c in s if c.isalnum() or c in "-_")
 
-    if not st.session_state.person:
-        st.warning("Saisis une personne.")
-        st.stop()
 
-    person_dir = AUDIO_DIR / st.session_state.person
-    person_dir.mkdir(exist_ok=True)
+persons = [d.name for d in AUDIO_DIR.iterdir() if d.is_dir()]
+subs = []
 
-    subs = [p.name for p in person_dir.iterdir() if p.is_dir()]
-    sel_sub = st.selectbox("Sous-dossier", ["(nouveau)"] + subs, index=0 if st.session_state.subdir == "" else None)
-    if sel_sub == "(nouveau)":
-        new_sub = st.text_input("Nouveau sous-dossier", value=st.session_state.subdir)
-        st.session_state.subdir = new_sub.strip()
-    else:
-        st.session_state.subdir = sel_sub
 
-    if not st.session_state.subdir:
-        st.warning("Saisis un sous-dossier.")
-        st.stop()
+def test_audio():
 
-    desc = st.text_input("Nom / description", value=st.session_state.desc)
-    st.session_state.desc = desc.strip() or st.session_state.desc
+    return False
 
-    # Boutons Enregistrement et upload
-    try:
-        from audio_recorder_streamlit import audio_recorder
 
-        audio_bytes = audio_recorder(text="🎙 Enregistrer / Stop")
-        if audio_bytes and st.button("Sauvegarder l'enregistrement"):
-            outdir = person_dir / st.session_state.subdir
-            outdir.mkdir(parents=True, exist_ok=True)
-            safe = "".join(c for c in st.session_state.desc if c.isalnum() or c in "-_") or "rec"
-            out = outdir / f"{safe}.wav"
-            if out.exists():
-                st.warning("Nom déjà utilisé.")
-            else:
-                out.write_bytes(audio_bytes)
-                st.success(f"Créé : {out.relative_to(AUDIO_DIR)}")
-    except Exception:
-        st.info("Active le micro avec : `pip install audio-recorder-streamlit`")
+if enregistrement:
+    with st.container():
+        st.markdown("### Personne")
+        col1, col2 = st.columns([2, 3])
+        with col1:
+            person_selected = st.selectbox("Dossier existant", options=[""] + persons, key="person_select")
+        with col2:
+            person_new = st.text_input("Nouveau nom", key="person_new")
+        person = person_new.strip() if person_new.strip() else person_selected
 
-    up = st.file_uploader("Uploader un fichier audio", type=list(AUDIO_EXT))
-    if up and st.button("Ajouter le fichier"):
-        outdir = person_dir / st.session_state.subdir
-        outdir.mkdir(parents=True, exist_ok=True)
-        out = outdir / up.name
-        if out.exists():
-            st.warning("Fichier existe déjà.")
-        else:
-            out.write_bytes(up.read())
-            st.success(f"Ajouté : {out.relative_to(AUDIO_DIR)}")
+        if not person:
+            st.warning("Merci de renseigner une personne.")
+            st.stop()
 
-st.divider()
+        person_dir = AUDIO_DIR / person
 
-# Liste des fichiers triés
-st.subheader("Enregistrements")
-all_files = list(AUDIO_DIR.rglob("*"))
-files = [f for f in all_files if f.suffix.lower().lstrip(".") in AUDIO_EXT]
-if not files:
-    st.info("Aucun enregistrement.")
-else:
-    for f in sorted(files):
-        with st.container(border=True):
-            st.write(f"**{f.relative_to(AUDIO_DIR)}**")
-            st.audio(str(f))
-            c1, c2 = st.columns(2)
-            if c1.button("Tester", key=f"t-{f}"):
-                ok = "ref" in f.stem.lower()
-                st.success("PASS") if ok else st.error("FAIL")
-            if c2.button("Supprimer", key=f"d-{f}"):
-                f.unlink(missing_ok=True)
-                st.rerun()
+        try :
+            subs = [d.name for d in person_dir.iterdir() if d.is_dir()]
+        except :
+            pass
+
+        st.markdown("### Sous-dossier")
+        col3, col4 = st.columns([2, 3])
+        with col3:
+            if subs :
+                sub_selected = st.selectbox("Sous-dossier existant", options=[""] + subs, key="sub_select")
+            else :
+                sub_selected = st.selectbox("Sous-dossier existant", options=[""], key="sub_select")
+        with col4:
+            sub_new = st.text_input("Nouveau sous-dossier", key="sub_new")
+        subdir = sub_new.strip() if sub_new.strip() else sub_selected
+
+        if not subdir:
+            st.warning("Merci de renseigner un sous-dossier.")
+            st.stop()
+
+        desc = st.text_input("Nom fichier",  key="desc").strip()
+        if not desc:
+            st.warning("Merci de renseigner un nom")
+            st.stop()
+
+        outdir = person_dir / subdir
+
+        try:
+            from audio_recorder_streamlit import audio_recorder
+
+            audio_bytes = audio_recorder(text="Enregistrer / Stop")
+
+            if audio_bytes and st.button("Sauvegarder l'enregistrement"):
+                safe_name = safe_string(desc)
+                outdir = AUDIO_DIR / person / subdir
+                outdir.mkdir(parents=True, exist_ok=True)
+                file_path = outdir / f"{safe_name}.wav"
+                file_path.write_bytes(audio_bytes)
+                st.success(f"Fichier créé / réécrit : {file_path.relative_to(AUDIO_DIR)}")
+
+        except ImportError:
+            st.info("Installe `audio-recorder-streamlit` pour activer l'enregistrement via micro.")
+
+if tests:
+    with st.container():
+        st.markdown("### Sélection et écoute de fichiers audio")
+
+        audio_file_1 = st.file_uploader("Fichier audio 1", type=AUDIO_EXT, key="file1")
+        audio_file_2 = st.file_uploader("Fichier audio 2", type=AUDIO_EXT, key="file2")
+
+        with st.container():
+            if audio_file_1:
+                st.markdown("Fichier 1 :")
+                st.audio(audio_file_1, format="audio/wav")
+
+            if audio_file_2:
+                st.markdown("Fichier 2 :")
+                st.audio(audio_file_2, format="audio/wav")
+
+        if st.button("Lancer test audio"):
+            test_audio()
