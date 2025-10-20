@@ -9,7 +9,7 @@ AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 AUDIO_EXT = ("wav")
 
 enregistrement = st.checkbox("Afficher la partie enregistrement", value=True)
-tests = st.checkbox("Afficher les dossiers personnels", value=True)
+tests = st.checkbox("Afficher la partie de test", value=True)
 
 def safe_string(s):
     return "".join(c for c in s if c.isalnum() or c in "-_")
