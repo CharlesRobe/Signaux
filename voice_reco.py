@@ -61,13 +61,13 @@ def comparison_tests(reference_file, targets):
         print(f"Similarity between {ref_name} and {target_name}: {(similarity/best_similarity)*100}%")
 
 # File paths definitions
-ju_patate = "/home/he202415/GitHub/Signaux/data/audio/Julien/Mot/patate.wav"
-ju_pomme = "/home/he202415/GitHub/Signaux/data/audio/Julien/Mot/pomme.wav"
-ju_bouteille = "/home/he202415/GitHub/Signaux/data/audio/Julien/Mot/bouteille.wav"
+ju_patate = "/home/he202415/GitHub/Signaux/data/audio/Julien/Mot/ju_patate.wav"
+ju_pomme = "/home/he202415/GitHub/Signaux/data/audio/Julien/Mot/ju_pomme.wav"
+ju_bouteille = "/home/he202415/GitHub/Signaux/data/audio/Julien/Mot/ju_bouteille.wav"
 
-cha_patate = "/home/he202415/GitHub/Signaux/data/audio/Charles/Mot/patate.wav"
-cha_pomme = "/home/he202415/GitHub/Signaux/data/audio/Charles/Mot/pomme.wav"
-cha_bouteille = "/home/he202415/GitHub/Signaux/data/audio/Charles/Mot/bouteille.wav"
+cha_patate = "/home/he202415/GitHub/Signaux/data/audio/Charles/Mot/cha_patate.wav"
+cha_pomme = "/home/he202415/GitHub/Signaux/data/audio/Charles/Mot/cha_pomme.wav"
+cha_bouteille = "/home/he202415/GitHub/Signaux/data/audio/Charles/Mot/cha_bouteille.wav"
 
 targets = [ju_patate, ju_pomme, ju_bouteille]
 
