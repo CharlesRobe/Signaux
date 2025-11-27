@@ -2,15 +2,13 @@
 
 **Disclaimer**
 
-Merci de bien vouloir nous transmettre vos enregistrements audio pour le projet EPHEC. Ceux‑ci seront hébergés publiquement à l’adresse suivante : https://github.com/CharlesRobe/Signaux/tree/main/data/audio. En acceptant, vous reconnaissez que :
+Merci à vous de bien vouloir nous aider en envisageant de nous transmettre vos enregistrements audio pour le projet EPHEC. Ceux‑ci seront hébergés publiquement à l’adresse suivante : https://github.com/CharlesRobe/Signaux/tree/main/data/audio. En acceptant, vous reconnaissez que :
 
 - Visibilité publique – Tout détenteur de l’URL pourra accéder aux fichiers. Une fois publiés, ils peuvent être copiés ou archivés de façon permanente.
 
 - Finalité d’utilisation – Les enregistrements seront employés uniquement pour analyser et entraîner des algorithmes de reconnaissance de timbre et de mots, via des scripts Python développés par l’équipe EPHEC. Le code restera la propriété exclusive de l’EPHEC et ne sera ni publié, ni monétisé.
 
 - Accès – Seuls les membres du projet, les professeurs de l’EPHEC et les personnes disposant de l’URL pourront consulter les fichiers.
-
-- Licence – Les fichiers sont distribués sous licence Creative Commons Attribution‑NonCommercial‑NoDerivatives (CC‑BY‑NC‑ND). Toute utilisation différente nécessite votre autorisation expresse.
 
 - Droit de retrait – Vous pouvez demander la suppression de votre enregistrement à tout moment en contactant un des membres de l'équipe de développement. Nous nous engageons à retirer le fichier du dépôt dans un délai raisonnable (maximum une semaine), bien que des copies déjà téléchargées puissent subsister.
 
