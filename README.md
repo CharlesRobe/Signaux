@@ -1,7 +1,7 @@
-Create a Python venv and install the following :
+Create a Python venv and install the requirements:
 
 ```shell
-pip install streamlit
+pip install -r requirements.txt
 ```
 
 Now run the app with the following command :
@@ -9,5 +9,3 @@ Now run the app with the following command :
 ```shell
 streamlit run app.py
 ```
-
-
