@@ -38,7 +38,7 @@ filtered_audio_dirs = [
     "./Filtered_Audio/Phrase 12",
 ]
 
-# filter.compare_spectrograms(dirty_audio_dirs, filtered_audio_dirs)
+filter.compare_spectrograms(dirty_audio_dirs, filtered_audio_dirs)
 
 # 3. Mise au même volume (pour que le seuil fonctionne correctement)
 
