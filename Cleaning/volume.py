@@ -5,11 +5,11 @@ import numpy as np
 
 def normalize_audio_volume(
     input_dirs: list[str],
-    output_dir: str = "./Normalized_Volume",
+    output_dir: str = "./Normalized_Audio",
     target_db: float = -20.0
 ):
     """
-    Normalise tous les fichiers WAV présents dans plusieurs répertoires,
+    Normalise le volume de tous les fichiers WAV présents dans plusieurs répertoires,
     en préservant leur structure interne, puis les stocke dans output_dir.
 
     Exemple d'utilisation :
