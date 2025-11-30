@@ -31,4 +31,4 @@ filtered_audio_files = [
 ]
 
 filter_noise(dirty_audio_files)
-compare_spectrograms(dirty_audio_files, filtered_audio_files) # Attention c'est long
+#compare_spectrograms(dirty_audio_files, filtered_audio_files) # Attention c'est long

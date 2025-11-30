@@ -1,3 +1,6 @@
 test.py
 Clean_Audio/
+Normalized_Audio/
+Filtered_Audio/
+trimmed_audio/
 __pycache__/
