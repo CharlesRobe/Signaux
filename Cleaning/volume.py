@@ -5,7 +5,7 @@ import numpy as np
 
 def normalize_audio_volume(
     input_dirs: list[str],
-    output_dir: str,
+    output_dir: str = "./Normalized_Volume",
     target_db: float = -20.0
 ):
     """
@@ -28,15 +28,17 @@ def normalize_audio_volume(
 
     for input_dir in input_dirs:
         if not os.path.isdir(input_dir):
-            print(f"Répertoire introuvable : {input_dir}")
+            print(f"❗ Répertoire introuvable : {input_dir}")
             continue
 
-        print(f"Traitement du dossier : {input_dir}")
+        print(f"⏳ Traitement du dossier {input_dir} en cours…")
 
         for root, _, files in os.walk(input_dir):
             for filename in files:
                 if not filename.lower().endswith(".wav"):
                     continue
+                
+                print(f"⏳ Traitement du fichier {filename} en cours…")
 
                 input_path = os.path.join(root, filename)
 
@@ -64,9 +66,13 @@ def normalize_audio_volume(
                 # Écriture
                 sf.write(output_path, normalized_audio, sr)
 
+                print(f"✔️ Traitement du fichier {filename} terminé.")
+
                 print(f"Normalisé : {input_path} → {output_path}")
 
-    print("Traitement terminé.")
+        print(f"✔️ Traitement du dossier {input_dir} terminé.")
+
+    print("✅ Traitement terminé.")
 
 
 
@@ -83,11 +89,14 @@ def check_audio_volume(directories):
 
     for directory in directories:
         if not os.path.isdir(directory):
-            print(f"Répertoire introuvable : {directory}")
+            print(f"❗ Répertoire introuvable : {directory}")
             continue
+
+        print(f"⏳ Analyse des fichiers du répertoire {directory} en cours…")
 
         for root, _, files in os.walk(directory):
             for f in files:
+                print(f"⏳ Analyse du fichier {f} en cours…")
                 if not f.lower().endswith(".wav"):
                     continue
 
@@ -98,9 +107,12 @@ def check_audio_volume(directories):
                 dbfs = 20 * np.log10(rms + 1e-12)
 
                 results.append((path, rms, dbfs))
+                print(f"✔️ Analyse du fichier {f} terminée.")
+        
+        print(f"✔️ Analyse des fichiers du répertoire {directory} terminée.")
 
     if not results:
-        print("Aucun fichier WAV trouvé.")
+        print("❗ Aucun fichier WAV trouvé.")
         return
 
     # Niveau moyen
@@ -122,8 +134,8 @@ def check_audio_volume(directories):
     print(f"Écart maximal observé : {max_deviation:.2f} dB")
 
     if max_deviation < 0.5:
-        print("→ Tous les fichiers ont un volume uniformisé (écart très faible).")
+        print("✅ Tous les fichiers ont un volume uniformisé (écart très faible).")
     elif max_deviation < 1.5:
-        print("→ Les fichiers sont globalement uniformes, mais il existe quelques écarts légers.")
+        print("⚠️ Les fichiers sont globalement uniformes, mais il existe quelques écarts légers.")
     else:
-        print("→ Les volumes ne sont pas uniformes : l'écart est notable.")
+        print("❌ Les volumes ne sont pas uniformes : l'écart est notable.")
