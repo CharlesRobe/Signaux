@@ -1,0 +1,6 @@
+test.py
+Normalized_Audio/
+Filtered_Audio/
+Spectrograms/
+trimmed_audio/
+__pycache__/
