@@ -5,8 +5,9 @@ from librosa.sequence import dtw
 import os
 import sys
 
-SEUIL_BIO = 35.0   # En dessous = meme personne
-SEUIL_TXT = 1  # En dessous = meme phrase
+SEUIL_BIO = 28.0   # En dessous = meme personne
+SEUIL_TXT = 7 # En dessous = meme phrase
+
 
 def charger_audio(chemin):
     # Nettoyage du chemin pour compatibilité terminal
@@ -17,7 +18,7 @@ def charger_audio(chemin):
         return None, None
 
     try:
-        # Chargement à 16kHz (standard voix)
+        # Chargement à 4kHz (standard voix) mais *2 pour le frequence d'échantillonnage
         y, sr = librosa.load(chemin, sr=8000)
         # Suppression des silences début/fin pour optimiser la comparaison
         y, _ = librosa.effects.trim(y, top_db=20)
@@ -77,9 +78,7 @@ def main(f_ref, f_test):
     dist_bio = score_biometrie(mfcc_ref, mfcc_test)
     dist_txt = score_mot_de_passe(mfcc_ref, mfcc_test)
 
-    # 4. Seuils de décision (A ajuster selon tests micro)
-    SEUIL_BIO = 35.0   # En dessous = meme personne
-    SEUIL_TXT = 0.55   # En dessous = meme phrase
+ 
 
     # 5. Affichage resultats
     print("-" * 30)
