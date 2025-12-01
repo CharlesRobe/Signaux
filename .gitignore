@@ -1,3 +1,6 @@
 .idea/
 Cleaned_Audio/
 venv/
+Data/
+optimisation_seuils.txt
+resultats.txt

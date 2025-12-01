@@ -5,8 +5,8 @@ from librosa.sequence import dtw
 import os
 import sys
 
-SEUIL_BIO = 28.0   # En dessous = meme personne
-SEUIL_TXT = 7 # En dessous = meme phrase
+SEUIL_BIO = 56.0   # En dessous = meme personne
+SEUIL_TXT = 1900  # En dessous = meme phrase
 
 
 def charger_audio(chemin):
@@ -55,32 +55,27 @@ def score_mot_de_passe(mfcc1, mfcc2):
     D, wp = dtw(mfcc1, mfcc2, subseq=True)
 
     # Cout normalise par la longueur du chemin
-    return D[-1, -1] / len(wp)
+    return D[-1, -1] 
 
 
 def main(f_ref, f_test):
     global SEUIL_BIO, SEUIL_TXT
-    print("-" * 30)
-    print("Traitement en cours...")
 
-    # 1. Chargement
+    # Chargement
     y_ref, sr_ref = charger_audio(f_ref)
     y_test, sr_test = charger_audio(f_test)
 
     if y_ref is None or y_test is None:
         return
 
-    # 2. Extraction MFCC
     mfcc_ref = calcul_mfcc(y_ref, sr_ref)
     mfcc_test = calcul_mfcc(y_test, sr_test)
 
-    # 3. Calcul des distances
+    # Calcul de la distances entre les deux vocaux
     dist_bio = score_biometrie(mfcc_ref, mfcc_test)
     dist_txt = score_mot_de_passe(mfcc_ref, mfcc_test)
 
- 
-
-    # 5. Affichage resultats
+    # Affichage resultats
     print("-" * 30)
     print(f"Distance Timbre (Bio) : {dist_bio:.2f}  (Seuil: {SEUIL_BIO})")
     print(f"Distance Phrase (DTW) : {dist_txt:.3f}  (Seuil: {SEUIL_TXT})")

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from scipy.io import wavfile
 import noisereduce as nr
