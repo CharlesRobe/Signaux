@@ -189,7 +189,8 @@ def optimiser_seuils(DOSSIER_DATA, fichier_resultats="optimisation_seuils.txt"):
     Enregistre tous les résultats dans un fichier.
     """
 
-    resultats = []  # Liste de (seuil_bio, seuil_txt, f1, precision, recall)
+    resultats_bio = []  # Liste de (seuil_bio, seuil_txt, f1, precision, recall)
+    resultats_txt = []  # Liste de (seuil_bio, seuil_txt, f1, precision, recall)
 
     valeur_bio = list(range(20, 140, 1))
     valeur_txt = list(range(100, 6000, 50))
@@ -280,44 +281,57 @@ def optimiser_seuils(DOSSIER_DATA, fichier_resultats="optimisation_seuils.txt"):
                     else:
                         verif_phrase[3] += 1
 
-            taux_vp = verif_timbre[0] / (verif_timbre[0] + verif_timbre[1])
-            taux_vn = verif_timbre[3] / (verif_timbre[2] + verif_timbre[3])
-            score = (3 * taux_vp + 5 * taux_vn) / 8
+            taux_vp_bio = verif_timbre[0] / (verif_timbre[0] + verif_timbre[1])
+            taux_vn_bio = verif_timbre[3] / (verif_timbre[2] + verif_timbre[3])
+
+            taux_vp_txt = verif_phrase[0] / (verif_phrase[0] + verif_phrase[1])
+            taux_vn_txt = verif_phrase[3] / (verif_phrase[2] + verif_phrase[3])
 
             # Enregistrer
-            resultats.append((seuil_bio, seuil_txt, score, taux_vp, taux_vn,))
+            resultats_bio.append((seuil_bio, taux_vp_bio, taux_vn_bio, verif_timbre.copy()))
+            resultats_txt.append((seuil_txt, taux_vp_txt, taux_vn_txt, verif_phrase.copy()))
 
             # Écrire dans le fichier
-            ligne = f"BIO={seuil_bio:.1f} | TXT={seuil_txt} | SCORE={score*100:.2f}% | timbre = {verif_timbre} |  VP={taux_vp*100:.2f}% | VN={taux_vn*100:.2f}% \n"
+            ligne = f"BIO={seuil_bio} | TXT={seuil_txt} | "
+            ligne += f"timbre=[VP:{verif_timbre[0]} FN:{verif_timbre[1]} FP:{verif_timbre[2]} VN:{verif_timbre[3]}] | "
+            ligne += f"phrase=[VP:{verif_phrase[0]} FN:{verif_phrase[1]} FP:{verif_phrase[2]} VN:{verif_phrase[3]}]\n"
             f.write(ligne)
 
             # Affichage progression
             print(f"Progression: {compteur}/{total_tests} ({100*compteur/total_tests:.1f}%)")
 
-    # Trier par F1 décroissant
-    resultats.sort(key=lambda x: x[2], reverse=True)
-    top10 = resultats[:10]
-
-    # Afficher le top 10
+    # ========== TABLEAU COMPLET TIMBRE ==========
+        f.write("\n\n" + "="*100 + "\n")
+        f.write("TOUS LES RÉSULTATS TIMBRE (BIOMÉTRIE)\n")
+        f.write("="*100 + "\n")
+        f.write(f"{'SEUIL':<10} | {'VP%':<10} | {'VN%':<10} | {'VP':<8} | {'FN':<8} | {'FP':<8} | {'VN':<8}\n")
+        f.write("-"*100 + "\n")
+        
+        for seuil, taux_vp, taux_vn, stats in resultats_bio:
+            ligne = f"{seuil:<10} | {taux_vp*100:<10.2f} | {taux_vn*100:<10.2f} | "
+            ligne += f"{stats[0]:<8} | {stats[1]:<8} | {stats[2]:<8} | {stats[3]:<8}\n"
+            f.write(ligne)
+        
+        # ========== TABLEAU COMPLET PHRASE ==========
+        f.write("\n\n" + "="*100 + "\n")
+        f.write("TOUS LES RÉSULTATS PHRASE (TEXTE)\n")
+        f.write("="*100 + "\n")
+        f.write(f"{'SEUIL':<10} | {'VP%':<10} | {'VN%':<10} | {'VP':<8} | {'FN':<8} | {'FP':<8} | {'VN':<8}\n")
+        f.write("-"*100 + "\n")
+        
+        for seuil, taux_vp, taux_vn, stats in resultats_txt:
+            ligne = f"{seuil:<10} | {taux_vp*100:<10.2f} | {taux_vn*100:<10.2f} | "
+            ligne += f"{stats[0]:<8} | {stats[1]:<8} | {stats[2]:<8} | {stats[3]:<8}\n"
+            f.write(ligne)
+    
+    # Affichage console simplifié
     print("\n" + "=" * 70)
-    print("TOP 10 DES MEILLEURS SEUILS")
+    print("OPTIMISATION TERMINÉE")
     print("=" * 70)
-    for i, (bio, txt, score, taux_vp, taux_vn) in enumerate(top10, 1):
-        print(f"{i}. SEUIL_BIO={bio:.1f}, SEUIL_TXT={txt}")
-        print(f"   Score: {score*100}% | VP: {taux_vp*100:.2f}% | VN: {taux_vn*100:.2f}%  ")
-        print()
-
-    # Sauvegarder le top 10 dans le fichier
-    with open(fichier_resultats, 'a', encoding='utf-8') as f:
-        f.write("\n" + "=" * 70 + "\n")
-        f.write("TOP 10 DES MEILLEURS SEUILS\n")
-        f.write("=" * 70 + "\n")
-        for i, (bio, txt, score, taux_vp, taux_vn) in enumerate(top10, 1):
-            f.write(f"{i}. SEUIL_BIO={bio:.1f}, SEUIL_TXT={txt}\n")
-            f.write(f"   F1={score*100:.2f}% | VP: {taux_vp*100:.2f}% | VN: {taux_vn*100:.2f}% \n")
-
-    print(f"Tous les résultats sauvegardés dans '{fichier_resultats}'")
-    return top10
+    print(f"TIMBRE : {len(resultats_bio)} seuils testés (de {valeur_bio[0]} à {valeur_bio[-1]})")
+    print(f"PHRASE : {len(resultats_txt)} seuils testés (de {valeur_txt[0]} à {valeur_txt[-1]})")
+    print(f"\nConsulter '{fichier_resultats}' pour voir tous les VP% et VN%")
+    
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and not sys.argv[1].startswith('-'):

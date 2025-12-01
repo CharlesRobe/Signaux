@@ -5,8 +5,8 @@ from librosa.sequence import dtw
 import os
 import sys
 
-SEUIL_BIO = 56.0   # En dessous = meme personne
-SEUIL_TXT = 1900  # En dessous = meme phrase
+SEUIL_BIO = 44.0   # En dessous = meme personne
+SEUIL_TXT = 2250  # En dessous = meme phrase
 
 
 def charger_audio(chemin):
@@ -76,6 +76,8 @@ def main(f_ref, f_test):
     dist_txt = score_mot_de_passe(mfcc_ref, mfcc_test)
 
     # Affichage resultats
+    print(f"Fichier reference : {f_ref}")
+    print(f"Fichier test      : {f_test}")
     print("-" * 30)
     print(f"Distance Timbre (Bio) : {dist_bio:.2f}  (Seuil: {SEUIL_BIO})")
     print(f"Distance Phrase (DTW) : {dist_txt:.3f}  (Seuil: {SEUIL_TXT})")
